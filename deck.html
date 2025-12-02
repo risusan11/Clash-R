@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Deck Review Archive</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- 外部CSS -->
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- Toast & Trophy -->
+<div id="deckToast" class="deck-toast">Deck Submitted!</div>
+<div id="trophyAnim" class="trophy-anim">🏆</div>
+
+<!-- Login Box -->
+<div id="loginBox" class="login-box">
+  <input id="loginName" type="text" placeholder="Your Name" style="color:#000;background:#fff;">
+  <button id="loginBtn">Enter</button>
+</div>
+
+<header>
+  Deck Review Archive
+  <select id="themeSelect">
+    <option value="classic">Classic Dark</option>
+    <option value="royal">Royal Purple</option>
+    <option value="ice">Ice Blue</option>
+    <option value="inferno">Inferno Red</option>
+  </select>
+
+  <button id="openMyDecks" class="sort-btn">My Decks</button>
+
+  <div id="myDecksModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="closeMyDecks" class="close">&times;</span>
+      <h2>My Decks</h2>
+      <div id="myDecksArea"></div>
+    </div>
+  </div>
+</header>
+
+<!-- Deck List -->
+<div class="container" id="deckList"></div>
+
+<div class="mode-switch">
+  <button id="modeMy" class="mode-btn active">My Deck</button>
+  <button id="modeRequest" class="mode-btn">Request Review</button>
+</div>
+
+<!-- Builder -->
+<div class="container">
+  <div class="builder-box">
+
+    <!-- サイズ & ソート -->
+    <div class="builder-top-controls">
+      <div class="size-control">
+        <label class="control-label">Card Size</label>
+        <input id="cardSizeSlider" type="range" min="0.5" max="2.0" step="0.1">
+        <span id="cardSizeValue"></span>
+      </div>
+
+      <div class="sort-controls">
+        <span class="control-label">Sort</span>
+        <button class="sort-btn" data-sort="name">Name</button>
+        <button class="sort-btn" data-sort="elixir">Elixir</button>
+        <button class="sort-btn" data-sort="rarity">Rarity</button>
+      </div>
+    </div>
+
+    <div class="builder-title">Get Your Deck Reviewed</div>
+
+    <div class="builder-avg">
+      <div class="elixir-box">
+        <img src="cards/elixir.png" alt="elixir">
+        <span class="elixir-num" id="builderAvg">-</span>
+      </div>
+    </div>
+
+    <label id="playerNameLabel">Your Name</label>
+    <input id="playerName" type="text" placeholder="Your Name">
+
+    <!-- スロット -->
+    <div class="slots" id="slots">
+      <div class="slot" data-index="0"></div>
+      <div class="slot" data-index="1"></div>
+      <div class="slot" data-index="2"></div>
+      <div class="slot" data-index="3"></div>
+      <div class="slot" data-index="4"></div>
+      <div class="slot" data-index="5"></div>
+      <div class="slot" data-index="6"></div>
+      <div class="slot" data-index="7"></div>
+    </div>
+
+    <!-- 卡ード一覧 -->
+    <div class="card-list" id="cardList"></div>
+
+    <!-- Copy / Paste / Submit -->
+    <div class="deck-actions-panel">
+      <button id="addDeck" class="ui-btn main">Submit</button>
+      <button id="copyDeck" class="ui-btn green">Copy Deck</button>
+      <button id="pasteDeck" class="ui-btn blue">Paste Deck</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Admin Modal -->
+<div id="adminModal">
+  <div id="adminBox">
+    <h2>Admin Deck Viewer</h2>
+    <div id="adminDecks"></div>
+    <button id="closeAdmin">Close</button>
+  </div>
+</div>
+
+
+<div class="guide-box">
+
+  <h2>📘 How to Use Deck Review Archive</h2>
+
+  <p>
+    This page explains how to use the Deck Review Archive system — how to build decks,
+    save them, copy/paste them, and request reviews.
+  </p>
+
+  <h3>1. Login</h3>
+  <p>
+    Enter your name in the <b>Your Name</b> field and press <b>Enter</b>.  
+    Your personal deck storage will be created automatically.
+  </p>
+
+  <h3>2. Build Your Deck</h3>
+  <p>
+    There are 8 slots in the deck builder:
+  </p>
+  <ul>
+    <li><b>Top-left 2 slots:</b> Evo cards only</li>
+    <li><b>Top-right 2 slots:</b> Hero cards only</li>
+    <li><b>Bottom 4 slots:</b> Regular cards</li>
+  </ul>
+  <p>
+    Click a card in the card list to place it into the selected slot.
+  </p>
+
+  <h3>3. Card List Tools</h3>
+  <ul>
+    <li><b>Sort:</b> Sort cards by Name / Elixir / Rarity</li>
+    <li><b>Card Size:</b> Adjust the display size of the card icons</li>
+    <li><b>Average Elixir:</b> Automatically shows the deck's average elixir cost</li>
+  </ul>
+
+  <h3>4. Submit Your Deck</h3>
+  <p>
+    Press the pink <b>Submit</b> button to save your deck into <b>My Decks</b>.
+  </p>
+
+  <h3>5. Copy Deck</h3>
+  <p>
+    The <b>Copy Deck</b> button copies your current 8-card deck into the clipboard  
+    as a JSON array. Example:
+  </p>
+  <pre>
+["Hog","Knight","IceSpirit","Log","Fireball","Tesla","Musk","Cannon"]
+  </pre>
+
+  <h3>6. Paste Deck (Auto Load)</h3>
+  <p>
+    If your clipboard contains a JSON deck array, press <b>Paste Deck</b> to load it
+    instantly into the builder.  
+    This allows fast deck sharing and rebuilding.
+  </p>
+
+  <h3>7. My Decks</h3>
+  <p>
+    Press <b>My Decks</b> at the top to open your stored deck list.  
+    There you can:
+  </p>
+  <ul>
+    <li>View saved decks</li>
+    <li>Copy them</li>
+    <li>Delete them</li>
+  </ul>
+
+  <h3>8. Request Review</h3>
+  <p>
+    Switch the mode to <b>Request Review</b> and press Submit to send a deck
+    review request.  
+    These requests appear in the admin panel.
+  </p>
+
+  <h3>✔ Summary</h3>
+  <ul>
+    <li>Create decks</li>
+    <li>Save decks</li>
+    <li>Copy decks</li>
+    <li>Paste decks instantly</li>
+    <li>Sort cards</li>
+    <li>Adjust card size</li>
+    <li>Manage saved decks</li>
+    <li>Send review requests</li>
+  </ul>
+
+</div>
+
+</body>
+
+<!-- JS -->
+<script src="userManager.js"></script>
+<script src="main.js"></script>
+
+</html>
