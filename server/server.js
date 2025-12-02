@@ -1,28 +1,22 @@
+const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const express = require("express");
-const cors = require("cors");
-
 const app = express();
-app.use(cors());
-app.use(express.json());
 
-// ▲ Public フォルダ
-const PUBLIC = path.join(__dirname, "../public");
-console.log("STATIC PATH =", PUBLIC);
-app.use(express.static(PUBLIC));
+const PORT = process.env.PORT || 3000;
 
-// ▲ DB ファイル
+// ==== Static files (Render compatible) ====
+app.use(express.static(path.join(__dirname, "../public")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
+// ==== DB ====
 const DB_FILE = path.join(__dirname, "decks.json");
-console.log("DB FILE =", DB_FILE);
 
-// ===============================
-// DB 読み書き関数（←これが必要）
-// ===============================
 function readDB() {
-  if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, "[]", "utf8");
-  }
+  if (!fs.existsSync(DB_FILE)) return [];
   return JSON.parse(fs.readFileSync(DB_FILE, "utf8"));
 }
 
@@ -30,53 +24,37 @@ function writeDB(data) {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
 
-
-// ===============================
-// GET /decks
-// ===============================
+// ==== API ====
 app.get("/decks", (req, res) => {
-  const decks = readDB();
-  res.json(decks);
+  res.json(readDB());
 });
 
+app.use(express.json());
 
-// ===============================
-// POST /addDeck
-// ===============================
 app.post("/addDeck", (req, res) => {
-  const list = readDB();
-
+  const decks = readDB();
   const newDeck = {
-    id: crypto.randomUUID(),
+    id: Date.now().toString(),
     user: req.body.user,
     title: req.body.title,
-    cards: req.body.cards,
-    time: Date.now()
+    cards: req.body.cards
   };
 
-  list.push(newDeck);
-  writeDB(list);
+  decks.push(newDeck);
+  writeDB(decks);
 
-  res.json({ ok: true });
+  res.json({ success: true });
 });
 
-
-// ===============================
-// DELETE /deleteDeck/:id
-// ===============================
 app.delete("/deleteDeck/:id", (req, res) => {
-  const id = req.params.id;
   const decks = readDB();
+  const id = req.params.id;
 
-  const newDecks = decks.filter(d => d.id !== id);
-
-  writeDB(newDecks);
-  console.log("DELETED:", id);
-
-  res.json({ ok: true });
+  writeDB(decks.filter(d => d.id !== id));
+  res.json({ success: true });
 });
 
-
-// ===============================
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server started on " + PORT));
+// ==== Start ====
+app.listen(PORT, () => {
+  console.log("Server running on", PORT);
+});
