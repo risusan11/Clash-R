@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<title>Deck Review Archive</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- CSS -->
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<!-- Toast & Trophy -->
+<div id="deckToast" class="deck-toast">Deck Submitted!</div>
+<div id="trophyAnim" class="trophy-anim">🏆</div>
+
+<!-- Login Box -->
+<div id="loginBox" class="login-box">
+  <input id="loginName" type="text" placeholder="Your Name" style="color:#000;background:#fff;">
+  <button id="loginBtn">Enter</button>
+</div>
+
+<header>
+  Deck Review Archive
+  <select id="themeSelect">
+    <option value="classic">Classic Dark</option>
+    <option value="royal">Royal Purple</option>
+    <option value="ice">Ice Blue</option>
+    <option value="inferno">Inferno Red</option>
+  </select>
+
+  <button id="openMyDecks" class="sort-btn">My Decks</button>
+
+  <div id="myDecksModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="closeMyDecks" class="close">&times;</span>
+      <h2>My Decks</h2>
+      <div id="myDecksArea"></div>
+    </div>
+  </div>
+</header>
+
+<!-- Deck List -->
+<div class="container" id="deckList"></div>
+
+<div class="mode-switch">
+  <button id="modeMy" class="mode-btn active">My Deck</button>
+  <button id="modeRequest" class="mode-btn">Request Review</button>
+</div>
+
+<!-- Builder -->
+<div class="container">
+  <div class="builder-box">
+
+    <!-- サイズ & ソート -->
+    <div class="builder-top-controls">
+      <div class="size-control">
+        <label class="control-label">Card Size</label>
+        <input id="cardSizeSlider" type="range" min="0.5" max="2.0" step="0.1">
+        <span id="cardSizeValue"></span>
+      </div>
+
+      <div class="sort-controls">
+        <span class="control-label">Sort</span>
+        <button class="sort-btn" data-sort="name">Name</button>
+        <button class="sort-btn" data-sort="elixir">Elixir</button>
+        <button class="sort-btn" data-sort="rarity">Rarity</button>
+      </div>
+    </div>
+
+    <div class="builder-title">Get Your Deck Reviewed</div>
+
+    <div class="builder-avg">
+      <div class="elixir-box">
+        <img src="cards/elixir.png" alt="elixir">
+        <span class="elixir-num" id="builderAvg">-</span>
+      </div>
+    </div>
+
+    <label id="playerNameLabel">Your Name</label>
+    <input id="playerName" type="text" placeholder="Your Name">
+
+    <!-- スロット -->
+    <div class="slots" id="slots">
+      <div class="slot" data-index="0"></div>
+      <div class="slot" data-index="1"></div>
+      <div class="slot" data-index="2"></div>
+      <div class="slot" data-index="3"></div>
+      <div class="slot" data-index="4"></div>
+      <div class="slot" data-index="5"></div>
+      <div class="slot" data-index="6"></div>
+      <div class="slot" data-index="7"></div>
+    </div>
+
+    <!-- カード一覧 -->
+    <div class="card-list" id="cardList"></div>
+
+    <!-- Copy / Paste / Submit -->
+    <div class="deck-actions-panel">
+      <button id="addDeck" class="ui-btn main">Submit</button>
+      <button id="copyDeck" class="ui-btn green">Copy Deck</button>
+      <button id="pasteDeck" class="ui-btn blue">Paste Deck</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Admin Modal -->
+<div id="adminModal">
+  <div id="adminBox">
+    <h2>Admin Deck Viewer</h2>
+    <div id="adminDecks"></div>
+    <button id="closeAdmin">Close</button>
+  </div>
+</div>
+
+<section class="guide-box">
+  <h2>🔥 What This Site Is About</h2>
+  <p>
+    This website is the official companion tool for the <strong>akomiya</strong> YouTube channel.
+    In my videos, AI evaluates viewers’ Clash Royale decks — analyzing synergy, elixir balance,
+    offense/defense structure, and overall gameplan potential.
+  </p>
+  <p>
+    To make that content possible, this site allows everyone to:
+  </p>
+  <ul>
+    <li><strong>Submit their decks</strong> for AI review</li>
+    <li><strong>View decks used in past videos</strong></li>
+    <li><strong>Browse organized archives</strong> of featured decks</li>
+    <li><strong>Experiment with deck building</strong> using an interactive tool</li>
+    <li><strong>Save and manage personal decks</strong> privately on your own device</li>
+  </ul>
+  <p>
+    It works as both a submission hub for upcoming videos and a resource library for previous content.
+  </p>
+
+  <hr>
+
+  <h2>🧭 How to Use This Website</h2>
+  <p>
+    Here is a simple overview of the main features and how to use them effectively.
+  </p>
+
+  <h3>1. Log In</h3>
+  <p>
+    Before using the builder or saving decks, enter your name in the login box at the top of the page.
+  </p>
+  <ul>
+    <li>Your name is attached to your <strong>deck submissions</strong>.</li>
+    <li>It is also used when <strong>displaying your decks</strong> inside lists.</li>
+    <li>No account or password is required — everything is stored locally in your browser,
+      except when you submit a deck for review.</li>
+  </ul>
+  <p>
+    This makes it easy to jump in, test decks, and participate without creating an account.
+  </p>
+
+  <h3>2. Build Your Deck</h3>
+  <p>
+    The deck builder lets you create a Clash Royale deck visually, using the exact cards from the game.
+  </p>
+  <ol>
+    <li>Click a <strong>slot</strong> to select where you want to place a card.</li>
+    <li>Click a <strong>card</strong> from the card list to insert it into that slot.</li>
+    <li>The builder automatically enforces:
+      <ul>
+        <li><strong>Evo cards</strong> can only be placed in the first two slots.</li>
+        <li><strong>Champion / Hero cards</strong> can only be placed in the next two slots.</li>
+        <li>You cannot accidentally add more heroes than allowed.</li>
+      </ul>
+    </li>
+    <li>The <strong>average elixir</strong> of your current deck is calculated and displayed in real time.</li>
+  </ol>
+  <p>
+    This system helps you build legal, well-structured decks quickly without manual checking.
+  </p>
+
+  <h3>3. “My Decks” – Personal Deck Storage</h3>
+  <p>
+    When you are in <strong>My Deck</strong> mode, any deck you save is stored locally in your browser.
+  </p>
+  <ul>
+    <li>Your decks are <strong>private</strong> — only visible to you on this device.</li>
+    <li>You can <strong>add</strong>, <strong>copy</strong>, and <strong>delete</strong> your saved decks.</li>
+    <li>This is perfect for:
+      <ul>
+        <li>Keeping multiple ladder or tournament decks.</li>
+        <li>Saving different versions while you experiment.</li>
+        <li>Returning later and loading your old builds instantly.</li>
+      </ul>
+    </li>
+  </ul>
+  <p>
+    Think of it as your own personal notebook of Clash Royale decks, integrated directly into the builder.
+  </p>
+
+  <h3>4. Submit a Deck for AI Review</h3>
+  <p>
+    To send your deck to the AI so it can be used in future <strong>akomiya</strong> videos,
+    switch to <strong>Request Review</strong> mode.
+  </p>
+  <ol>
+    <li>Make sure all 8 slots of your deck are filled.</li>
+    <li>Enter the name you want displayed (or use your login name).</li>
+    <li>Click <strong>Submit</strong> to send the deck.</li>
+  </ol>
+  <p>
+    When you submit a deck in this mode:
+  </p>
+  <ul>
+    <li>The deck is uploaded to the shared server.</li>
+    <li>It becomes part of the pool of decks that AI may review.</li>
+    <li>Your name can be shown in videos when your deck is selected.</li>
+  </ul>
+  <p>
+    This is the main way for viewers to participate and potentially see their deck analyzed in a video.
+  </p>
+
+  <h3>5. Extra Features & Quality-of-Life Tools</h3>
+  <p>
+    The site includes several small features to make deck management smoother:
+  </p>
+  <ul>
+    <li><strong>Copy / Paste Deck</strong> – copy the current deck as text and paste it back later.</li>
+    <li><strong>Theme Selection</strong> – switch between Classic, Royal, Ice, or Inferno visual themes.</li>
+    <li><strong>Card Size Slider</strong> – adjust the size of the card icons for your screen or preference.</li>
+    <li><strong>Animations & Toasts</strong> – subtle effects when saving or submitting decks so you always
+      know what just happened.</li>
+  </ul>
+  <p>
+    All of these are designed to make the builder feel responsive, clear, and fun to use.
+  </p>
+
+  <hr>
+
+  <h2>⭐ Why This Site Exists</h2>
+  <p>
+    This site was built specifically to support the idea behind the <strong>akomiya</strong> channel:
+    <em>“AI reviews and rates YOUR Clash Royale decks.”</em>
+  </p>
+  <p>
+    Instead of random or messy screenshots, this tool gives a clean and structured way to:
+  </p>
+  <ul>
+    <li>Prepare decks properly before sending them.</li>
+    <li>Store and refine your own ideas over time.</li>
+    <li>Browse builds from past videos and learn from them.</li>
+  </ul>
+  <p>
+    Whether you just want feedback on your favorite deck or you are constantly experimenting with new
+    archetypes, this website is here to connect your gameplay with AI-powered analysis in the videos.
+  </p>
+</section>
+
+<!-- JS（順番が超重要。userManager → main） -->
+<script src="userManager.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
