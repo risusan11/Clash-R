@@ -1123,13 +1123,51 @@ function updateRequestBadge() {
     badge.style.display = "none";
   }
 }
-document.addEventListener("keydown", async (e) => {
-  if (e.ctrlKey && e.shiftKey && e.key === "M") {
-    console.log("Admin Mode Open");  // ← デバッグ用
-    await renderAdmin();
-    document.getElementById("adminModal").style.display = "block";
+const ADMIN_PASSWORD = "shogo_only_2025";  // ← 好きな強パスワードに変更可
+
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "c") {
+    e.preventDefault();
+
+    const modal = document.getElementById("adminPassModal");
+    const input = document.getElementById("adminPassInput");
+    const error = document.getElementById("adminPassError");
+
+    error.style.display = "none";
+    input.value = "";
+
+    modal.style.display = "flex";
+    input.focus();
   }
 });
+
+// OK
+document.getElementById("adminPassOk").onclick = async () => {
+  const input = document.getElementById("adminPassInput");
+  const error = document.getElementById("adminPassError");
+
+  if (input.value === ADMIN_PASSWORD) {
+    document.getElementById("adminPassModal").style.display = "none";
+
+    await renderAdmin();
+    document.getElementById("adminModal").style.display = "block";
+  } else {
+    error.style.display = "block";
+  }
+};
+
+// Cancel
+document.getElementById("adminPassCancel").onclick = () => {
+  document.getElementById("adminPassModal").style.display = "none";
+};
+
+// Enterキーでも確定
+document.getElementById("adminPassInput").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    document.getElementById("adminPassOk").click();
+  }
+});
+
 
 document.getElementById("copyDeck").onclick = () => {
   const text = JSON.stringify(deck);
