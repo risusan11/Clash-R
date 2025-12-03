@@ -1,4 +1,4 @@
-
+const API_BASE = "https://clashreviewer.com";
 /* ============================================
    ▼ ログイン処理（main.js から呼ばれる）
 ============================================ */
@@ -160,7 +160,7 @@ const defaultDecks = [
 ];
 
 async function getAllDecks() {
-  const res = await fetch("http://localhost:3000/decks");
+  const res = await fetch(`${API_BASE}/decks`);
   const decks = await res.json();
   return [...defaultDecks, ...decks];
 }
@@ -721,7 +721,7 @@ document.getElementById("cardList").onclick = e => {
 };
 
 async function sendDeckRequestToAdmin(req) {
-  await fetch("http://localhost:3000/addDeck", {
+  await fetch(`${API_BASE}/addDeck`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -835,7 +835,7 @@ area.innerHTML += `
 async function deleteServerDeck(id) {
   if (!confirm("Delete this deck?")) return;
 
-  await fetch(`http://localhost:3000/deleteDeck/${id}`, {
+  await fetch(`${API_BASE}/deleteDeck/${id}`, {
     method: "DELETE"
   });
 
