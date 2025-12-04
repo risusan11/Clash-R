@@ -146,31 +146,32 @@ function sendDeckRequestToAdmin(data) {
   localStorage.setItem(adminKey, JSON.stringify(list));
 }
 
-function shareMyDeck(i) {
+function shareMyDeck(index) {
   const list = loadUserDecks();
-  const d = list[i];
-  if (!d) return;
+  const deck = list[index];
+  if (!deck) return;
 
-  // === ① クリップボードにコピー（["A","B","C"...]）形式 ===
-  const text = JSON.stringify(d.cards);
+  const text = JSON.stringify(deck.cards);
   navigator.clipboard.writeText(text);
 
-  // === ② デッキカードをフラッシュ ===
-  const deckFrames = document.querySelectorAll(".deck-frame")[i];
-  if (deckFrames) {
-    deckFrames.classList.add("copy-flash");
-    setTimeout(() => deckFrames.classList.remove("copy-flash"), 450);
+  // コピー表示（要素が無くても落ちない安全版）
+  const toast = document.getElementById("copyToast");
+  if (toast) {
+    toast.textContent = "Deck copied!";
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 1400);
   }
 
-  // === ③ トースト表示 ===
-  const toast = document.getElementById("copyToast");
-  toast.textContent = "Copied!";
-  toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 1500);
+  // スロット光らせる（あってもなくても動く）
+  document.querySelectorAll(".slot").forEach(s => {
+    s.classList.add("copy-flash");
+    setTimeout(() => s.classList.remove("copy-flash"), 450);
+  });
 }
+
 
 
 
