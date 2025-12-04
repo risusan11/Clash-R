@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<title>Deck Review Archive</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+<!-- CSS -->
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<!-- Admin Password Modal -->
+<div id="adminPassModal" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  z-index:999999;
+  justify-content:center;
+  align-items:center;
+">
+  <div style="
+    background:#111;
+    border:1px solid #444;
+    border-radius:12px;
+    padding:20px;
+    width:320px;
+    text-align:center;
+    box-shadow:0 0 30px #000;
+  ">
+    <h3 style="margin-bottom:12px;">Admin Access</h3>
+    <input
+      id="adminPassInput"
+      type="password"
+      placeholder="Enter password"
+      style="
+        width:100%;
+        padding:10px;
+        border-radius:8px;
+        border:1px solid #555;
+        background:#000;
+        color:#fff;
+        margin-bottom:12px;
+      "
+    >
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button id="adminPassOk" class="ui-btn main">Enter</button>
+      <button id="adminPassCancel" class="ui-btn blue">Cancel</button>
+    </div>
+    <p id="adminPassError" style="color:#ff4f4f; margin-top:10px; display:none;">
+      Wrong password
+    </p>
+  </div>
+</div>
+
+
+<body>
+
+<!-- Toast & Trophy -->
+<div id="deckToast" class="deck-toast">Deck Submitted!</div>
+<div id="trophyAnim" class="trophy-anim">🏆</div>
+
+<!-- Login Box -->
+<div id="loginBox" class="login-box">
+  <input id="loginName" type="text" placeholder="Your Name" style="color:#000;background:#fff;">
+  <button id="loginBtn">Enter</button>
+</div>
+
+<header>
+  Deck Review Archive
+  <select id="themeSelect">
+    <option value="classic">Classic Dark</option>
+    <option value="royal">Royal Purple</option>
+    <option value="ice">Ice Blue</option>
+    <option value="inferno">Inferno Red</option>
+  </select>
+
+  <button id="openMyDecks" class="sort-btn">My Decks</button>
+
+  <div id="myDecksModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="closeMyDecks" class="close">&times;</span>
+      <h2>My Decks</h2>
+      <div id="myDecksArea"></div>
+    </div>
+  </div>
+</header>
+
+<!-- Deck List -->
+<div class="container" id="deckList"></div>
+
+<div class="mode-switch">
+  <button id="modeMy" class="mode-btn active">My Deck</button>
+  <button id="modeRequest" class="mode-btn">Request Review</button>
+</div>
+
+<!-- Builder -->
+<div class="container">
+  <div class="builder-box">
+
+    <!-- サイズ & ソート -->
+    <div class="builder-top-controls">
+      <div class="size-control">
+        <label class="control-label">Card Size</label>
+        <input id="cardSizeSlider" type="range" min="0.5" max="2.0" step="0.1">
+        <span id="cardSizeValue"></span>
+      </div>
+
+      <div class="sort-controls">
+        <span class="control-label">Sort</span>
+        <button class="sort-btn" data-sort="name">Name</button>
+        <button class="sort-btn" data-sort="elixir">Elixir</button>
+        <button class="sort-btn" data-sort="rarity">Rarity</button>
+      </div>
+    </div>
+
+    <div class="builder-title">Get Your Deck Reviewed</div>
+
+    <div class="builder-avg">
+      <div class="elixir-box">
+        <img src="cards/elixir.png" alt="elixir">
+        <span class="elixir-num" id="builderAvg">-</span>
+      </div>
+    </div>
+
+    <label id="playerNameLabel">Your Name</label>
+    <input id="playerName" type="text" placeholder="Your Name">
+
+    <!-- スロット -->
+    <div class="slots" id="slots">
+      <div class="slot" data-index="0"></div>
+      <div class="slot" data-index="1"></div>
+      <div class="slot" data-index="2"></div>
+      <div class="slot" data-index="3"></div>
+      <div class="slot" data-index="4"></div>
+      <div class="slot" data-index="5"></div>
+      <div class="slot" data-index="6"></div>
+      <div class="slot" data-index="7"></div>
+    </div>
+
+    <!-- カード一覧 -->
+    <div class="card-list" id="cardList"></div>
+
+    <!-- Copy / Paste / Submit -->
+    <div class="deck-actions-panel">
+      <button id="addDeck" class="ui-btn main">Submit</button>
+      <button id="copyDeck" class="ui-btn green">Copy Deck</button>
+      <button id="pasteDeck" class="ui-btn blue">Paste Deck</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Admin Modal -->
+<div id="adminModal">
+  <div id="adminBox">
+    <h2>Admin Deck Viewer</h2>
+    <div id="adminDecks"></div>
+    <button id="closeAdmin">Close</button>
+  </div>
+</div>
+
+<!-- JS（順番が超重要。userManager → main） -->
+<script src="userManager.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
