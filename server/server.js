@@ -1,92 +1,97 @@
 const express = require("express");
 const cors = require("cors");
-const fs = require("fs");
 const path = require("path");
-const crypto = require("crypto"); // ← UUID用
+const Database = require("better-sqlite3");
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-// ======================================================
-// ★ Render / ローカル どちらでも public を正しく配信
-// ======================================================
-app.use(express.static(path.join(__dirname, "../public")));
+// ===============================
+// ▲ Public フォルダ
+// ===============================
+const PUBLIC = path.join(__dirname, "../public");
+console.log("STATIC PATH =", PUBLIC);
+app.use(express.static(PUBLIC));
 
-// ======================================================
-// データベースファイル（Render では読み書きOK）
-// ======================================================
-const DB_FILE = path.join(__dirname, "decks.json");
+// ===============================
+// ▲ SQLite DB
+// ===============================
+const db = new Database("data.db");
 
-// DB読み込み
-function readDB() {
-  try {
-    const text = fs.readFileSync(DB_FILE, "utf8");
-    return JSON.parse(text);
-  } catch (e) {
-    console.error("DB read error:", e);
-    return [];
-  }
-}
+// テーブル作成（初回のみ実行される）
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS decks (
+    id TEXT PRIMARY KEY,
+    user TEXT,
+    title TEXT,
+    cards TEXT,
+    time INTEGER
+  )
+`).run();
 
-// DB書き込み
-function writeDB(data) {
-  try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
-  } catch (e) {
-    console.error("DB write error:", e);
-  }
-}
 
-// ======================================================
-// GET /decks  → デッキ一覧を返す
-// ======================================================
+// ===============================
+// GET /decks
+// ===============================
 app.get("/decks", (req, res) => {
-  const data = readDB();
-  res.json(data);
+  const decks = db.prepare(`
+    SELECT * FROM decks ORDER BY time DESC
+  `).all();
+
+  const parsed = decks.map(d => ({
+    ...d,
+    cards: JSON.parse(d.cards)
+  }));
+
+  res.json(parsed);
 });
 
-// ======================================================
-// POST /addDeck  → 新しいデッキを追加する
-// ======================================================
-app.post("/addDeck", (req, res) => {
-  const list = readDB();
 
+// ===============================
+// POST /addDeck
+// ===============================
+app.post("/addDeck", (req, res) => {
   const newDeck = {
     id: crypto.randomUUID(),
     user: req.body.user,
     title: req.body.title,
-    cards: req.body.cards,
+    cards: JSON.stringify(req.body.cards),
     time: Date.now()
   };
 
-  list.push(newDeck);
-  writeDB(list);
+  db.prepare(`
+    INSERT INTO decks (id, user, title, cards, time)
+    VALUES (?, ?, ?, ?, ?)
+  `).run(
+    newDeck.id,
+    newDeck.user,
+    newDeck.title,
+    newDeck.cards,
+    newDeck.time
+  );
 
   res.json({ ok: true });
 });
 
-// ======================================================
-// DELETE /deleteDeck/:id  → デッキ削除（必要なら）
-// ======================================================
+
+// ===============================
+// DELETE /deleteDeck/:id
+// ===============================
 app.delete("/deleteDeck/:id", (req, res) => {
   const id = req.params.id;
 
-  let list = readDB();
-  list = list.filter(item => item.id !== id);
+  db.prepare(`
+    DELETE FROM decks WHERE id = ?
+  `).run(id);
 
-  writeDB(list);
+  console.log("DELETED:", id);
   res.json({ ok: true });
 });
 
-// ======================================================
-// Render の本番用ポート / ローカル fallback
-// ======================================================
-const PORT = process.env.PORT || 10000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
-  console.log("STATIC PATH = ", path.join(__dirname, "../public"));
-  console.log("DB FILE = ", DB_FILE);
-});
+// ===============================
+app.listen(3000, () =>
+  console.log("Server running on http://localhost:3000")
+);
+
