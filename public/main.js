@@ -153,10 +153,41 @@ const defaultDecks = [
     cards: ["MegaKnight","eDragon","SkellyBarrel","Poison","Log","Bats","GobGang","IceSpirit"]
   },
   {
-    title: "Evo Hog Ram",
+    title: "Hog Ram",
     video: "https://youtube.com/shorts/nOCAar9niAA",
     cards: ["Evo_Cannon","Evo_Bomber","Hog","Ram","Musk","Arrows","Barrel","MP"]
-  }
+  },
+  {
+    title: "EGiant deck",
+    video: "https://youtube.com/shorts/-PvPUvb0bf0",
+    cards: ["Evo_Firecracker","Evo_Skellies","Witch","Vines","Log","Cannon","Bats","ElectroGiant"]
+  },
+    {
+    title: "Out in 1 day.",
+    video: "coming soon.",
+    cards: ["Evo_Witch","Evo_Hunter","balloon","GiantSkelly","GoblinCage","Guards","Fireball","Log"]
+  },
+    {
+    title: "Out in 2 days.",
+    video: "coming soon.",
+    cards: ["GobGang","MegaKnight","SkellyBarrel","Miner","Cannon","Bats","InfernoD","Log"]
+  },
+    {
+    title: "Out in 3 days.",
+    video: "coming soon.",
+    cards: ["Evo_Witch","Sparky","GoldenKnight","MP","DartGob","Arrows","Skarmy","Vines"]
+  },
+    {
+    title: "Out in 4 days.",
+    video: "coming soon.",
+    cards: ["Evo_Archers","Evo_Cannon","SkeletonKing","Prince","MegaKnight","Arrows","IceSpirit","Barrel"]
+  },
+    {
+    title: "Out in 5 days.",
+    video: "coming soon.",
+    cards: ["Evo_Valk","DartGob","GobGang","Miner","Bats","WallBreakers","Zap","Prince"]
+  },
+
 ];
 
 async function getAllDecks() {
