@@ -165,7 +165,7 @@ const defaultDecks = [
     {
     title: "Out in 1 day.",
     video: "coming soon.",
-    cards: ["Evo_Witch","Evo_Hunter","balloon","GiantSkelly","GoblinCage","Guards","Fireball","Log"]
+    cards: ["Evo_Witch","Evo_Hunter","Balloon","GiantSkelly","GoblinCage","Guards","Fireball","Log"]
   },
     {
     title: "Out in 2 days.",
