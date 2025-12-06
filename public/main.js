@@ -498,9 +498,12 @@ async function renderDecks() {
   const deckList = document.getElementById("deckList");
   deckList.innerHTML = "";
 
-  const decks = await getAllDecks(); // ← サーバー + default
+  const decks = await getAllDecks(); // default + サーバー
 
-  decks.forEach((d, index) => {
+  // ★ ここで「Request from ～」を除外
+  const filtered = decks.filter(d => !d.title.startsWith("Request from"));
+
+  filtered.forEach((d) => {
     const top = d.cards.slice(0,4).map(id => `<img src="${cardImg(id)}">`).join("");
     const bottom = d.cards.slice(4,8).map(id => `<img src="${cardImg(id)}">`).join("");
 
@@ -511,7 +514,9 @@ async function renderDecks() {
       <div class="deck-card">
         <div class="deck-title">
           <span>${d.title}</span>
-          <span class="avg-elixir"><img src="cards/elixir.png"> ${avg}</span>
+          <span class="avg-elixir">
+            <img src="cards/elixir.png"> ${avg}
+          </span>
         </div>
         <div class="cards">
           <div class="row">${top}</div>
@@ -522,6 +527,7 @@ async function renderDecks() {
     `;
   });
 }
+
 
 
 
