@@ -1,4 +1,4 @@
-const API_BASE = "https://clashreviewer.com";
+const API_BASE = "https://board-0zkf.onrender.com";
 /* ============================================
    ▼ ログイン処理（main.js から呼ばれる）
 ============================================ */
@@ -494,12 +494,11 @@ function createYTPreview(url) {
 /* =========================================================
    ▼ デッキ一覧描画（デフォルト + ログインユーザーのデッキ）
 ========================================================= */
-function renderDecks() {
+async function renderDecks() {
   const deckList = document.getElementById("deckList");
   deckList.innerHTML = "";
 
-  const myDecks = currentUser ? loadUserDecks() : [];
-  const decks = [...defaultDecks, ...myDecks];
+  const decks = await getAllDecks(); // ← サーバー + default
 
   decks.forEach((d, index) => {
     const top = d.cards.slice(0,4).map(id => `<img src="${cardImg(id)}">`).join("");
@@ -507,19 +506,6 @@ function renderDecks() {
 
     const avg = calcAvgElixir(d.cards);
     const yt = d.video ? createYTPreview(d.video) : "";
-
-    const isUser = index >= defaultDecks.length;
-    const userIdx = index - defaultDecks.length;
-
-    let action = "";
-    if (isUser) {
-      action = `
-        <div class="deck-actions">
-          <button class="copy-btn" onclick="shareMyDeck(${userIdx})">Copy</button>
-          <button class="del-btn" onclick="deleteUserDeck(${userIdx})">Delete</button>
-        </div>
-      `;
-    }
 
     deckList.innerHTML += `
       <div class="deck-card">
@@ -532,11 +518,11 @@ function renderDecks() {
           <div class="row">${bottom}</div>
         </div>
         ${yt}
-        ${action}
       </div>
     `;
   });
 }
+
 
 
 renderDecks();
@@ -815,7 +801,7 @@ async function renderAdmin() {
   const decks = await getAllDecks();
 
   // ▼ Review Requests（＝ユーザーから送られたデッキ）だけ抽出
-  const requests = decks.filter(d => d.user !== undefined); // defaultDeck を除外
+  const requests = decks.filter(d => d.username !== undefined); // defaultDeck を除外
 
   area.innerHTML += `<h2 style="margin-top:10px;">Review Requests</h2>`;
 
@@ -828,7 +814,7 @@ requests.forEach(r => {
 
   area.innerHTML += `
     <div class="deck-card">
-      <h3>${r.title} <span style="font-size:12px;">(${r.user})</span></h3>
+      <h3>${r.title} <span style="font-size:12px;">(${r.username})</span></h3>
       <div class="row">${top}</div>
       <div class="row">${bottom}</div>
 
