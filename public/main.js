@@ -181,8 +181,6 @@ const defaultDecks = [
     title: "Out in 2 days.",
     video: "coming soon.",
     cards: ["Evo_Archers","Evo_Cannon","SkeletonKing","Prince","MegaKnight","Arrows","IceSpirit","Barrel"]
-  },
-    {
 
   },
    {
