@@ -168,25 +168,28 @@ const defaultDecks = [
     cards: ["Evo_Witch","Evo_Hunter","Balloon","GiantSkelly","GoblinCage","Guards","Fireball","Log"]
   },
     {
-    title: "Out in 1 days.",
-    video: "coming soon.",
+    title: "MKMiner",
+    video: "https://youtube.com/shorts/h0RWI2BVB6E?feature=share",
     cards: ["GobGang","MegaKnight","SkellyBarrel","Miner","Cannon","Bats","InfernoD","Log"]
   },
     {
-    title: "Out in 2 days.",
+    title: "Out in 1 days.",
     video: "coming soon.",
     cards: ["Evo_Witch","Sparky","GoldenKnight","MP","DartGob","Arrows","Skarmy","Vines"]
   },
     {
-    title: "Out in 3 days.",
+    title: "Out in 2 days.",
     video: "coming soon.",
     cards: ["Evo_Archers","Evo_Cannon","SkeletonKing","Prince","MegaKnight","Arrows","IceSpirit","Barrel"]
   },
     {
+
+  },
+   {
     title: "Out in 4 days.",
     video: "coming soon.",
-    cards: ["Evo_Valk","DartGob","GobGang","Miner","Bats","WallBreakers","Zap","Prince"]
-  },
+    cards: ["Evo_eDragon","ElectroGiant","Knight_Hero","Tombstone","Earthquake","Log","GobGang","MP"]      
+   }
 
 ];
 
