@@ -198,6 +198,7 @@ const defaultDecks = [
     video: "coming soon.",
     cards: ["Barrel","IceSpirit","Knight_Hero","Inferno","Rocket","GobGang","Log","Princess"]
       }
+   ];
 async function getAllDecks() {
   const res = await fetch(`${API_BASE}/decks`);
   const decks = await res.json();
