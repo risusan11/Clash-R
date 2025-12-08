@@ -169,27 +169,34 @@ const defaultDecks = [
   },
     {
     title: "MKMiner",
-    video: "https://youtube.com/shorts/h0RWI2BVB6E?feature=share",
+    video: "https://www.youtube.com/shorts/h0RWI2BVB6E",
     cards: ["GobGang","MegaKnight","SkellyBarrel","Miner","Cannon","Bats","InfernoD","Log"]
   },
     {
-    title: "Out in 1 days.",
-    video: "coming soon.",
+    title: "GoldenKnightSparky",
+    video: "https://www.youtube.com/shorts/AGULAnfNbZg",
     cards: ["Evo_Witch","Sparky","GoldenKnight","MP","DartGob","Arrows","Skarmy","Vines"]
   },
     {
-    title: "Out in 2 days.",
+    title: "Out in 1 days.",
     video: "coming soon.",
     cards: ["Evo_Archers","Evo_Cannon","SkeletonKing","Prince","MegaKnight","Arrows","IceSpirit","Barrel"]
 
   },
    {
-    title: "Out in 4 days.",
+    title: "Out in 2 days.",
     video: "coming soon.",
     cards: ["Evo_eDragon","ElectroGiant","Knight_Hero","Tombstone","Earthquake","Log","GobGang","MP"]      
-   }
-
-];
+   },
+   {
+    title: "Out in 3 days.",
+    video: "coming soon.",
+    cards: ["Evo_SkellyBarrel","Evo_Barrel","MegaKnight","Balloon","GobGang","GoblinCage","Zap","DartGob"]  
+   },
+      {
+    title: "Out in 4 days.",
+    video: "coming soon.",
+    cards: ["Barrel","IceSpirit","Knight_Hero","Inferno","Rocket","GobGang","Log","Princess"];
 
 async function getAllDecks() {
   const res = await fetch(`${API_BASE}/decks`);
